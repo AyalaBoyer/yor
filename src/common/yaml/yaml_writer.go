@@ -13,13 +13,18 @@ import (
 	"github.com/bridgecrewio/yor/src/common/tagging/tags"
 	"github.com/bridgecrewio/yor/src/common/utils"
 	"github.com/sanathkr/yaml"
+	
 )
 
 const SingleIndent = "  "
 
+
+
+
 func WriteYAMLFile(readFilePath string, blocks []structure.IBlock, writeFilePath string, tagsAttributeName string, resourcesStartToken string) error {
 	// #nosec G304
 	// read file bytes
+	
 	originFileSrc, err := os.ReadFile(readFilePath)
 	if err != nil {
 		return fmt.Errorf("failed to read file %s because %s", readFilePath, err)
@@ -287,12 +292,23 @@ func MapResourcesLineYAML(filePath string, resourceNames []string, resourcesStar
 	for i, line := range fileLines {
 		cleanContent := strings.TrimSpace(line)
 		if strings.HasPrefix(cleanContent, resourcesStartToken+":") {
+			if strings.TrimSpace(fileLines[i-1])=="# yor:skip all" {
+				utils.SkipArr = append(utils.SkipArr, resourceNames...)
+			}
 			readResources = true
 			resourcesIndent = countLeadingSpaces(line)
 			continue
 		}
 
 		if readResources {
+
+			if i>0{
+
+				if strings.TrimSpace(fileLines[i-1])=="# yor:skip" {
+				 utils.SkipArr = append(utils.SkipArr,strings.Trim(strings.TrimSpace(line),":") )
+				 
+		    }
+	    }
 			lineIndent := countLeadingSpaces(line)
 			if lineIndent <= resourcesIndent && strings.TrimSpace(line) != "" && !strings.Contains(line, "#") {
 				// No longer inside resources block, get the last line of the previous resource if exists

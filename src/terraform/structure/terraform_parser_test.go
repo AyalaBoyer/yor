@@ -21,6 +21,67 @@ import (
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/stretchr/testify/assert"
 )
+func TestTerraformParser_SkipResourceTagging(t *testing.T) {
+    t.Run("All resources with skip comment added to utils.SkipArr", func(t *testing.T) {
+        // Initialize TerraformParser and parse file with all resources containing skip comment
+        p := &TerraformParser{}
+        p.Init("../../../tests/terraform/skipComment/", nil)
+        defer p.Close()
+        filePath := "../../../tests/terraform/skipComment/ourTest.tf"
+        _, err := p.ParseFile(filePath)
+        if err != nil {
+            t.Errorf("failed to read hcl file because %s", err)
+        }
+        assert.Equal(t, 3, len(utils.SkipArr))
+        assert.Contains(t, utils.SkipArr, "aws_vpc.example_vpc")
+        assert.Contains(t, utils.SkipArr, "aws_subnet.example_subnet")
+        assert.Contains(t, utils.SkipArr, "aws_instance.example_instance")
+    })
+
+    t.Run("No resources with skip all comment in the file, utils.SkipArr should be empty", func(t *testing.T) {
+        // Initialize TerraformParser and parse file with no skip tags
+        p := &TerraformParser{}
+        p.Init("../../../tests/terraform/skipComment/", nil)
+        defer p.Close()
+        filePath := "../../../tests/terraform/skipComment/noSkip.tf"
+        _, err := p.ParseFile(filePath)
+        if err != nil {
+            t.Errorf("failed to read hcl file because %s", err)
+        }
+        assert.Empty(t, utils.SkipArr)
+    })
+
+    t.Run("One resource with skip comment, only that resource added to utils.SkipArr", func(t *testing.T) {
+        // Initialize TerraformParser and parse file with one resource containing skip tag
+        p := &TerraformParser{}
+        p.Init("../../../tests/terraform/skipComment/", nil)
+        defer p.Close()
+        filePath := "../../../tests/terraform/skipComment/skipOne.tf"
+        _, err := p.ParseFile(filePath)
+        if err != nil {
+            t.Errorf("failed to read hcl file because %s", err)
+        }
+        assert.Equal(t, 1, len(utils.SkipArr))
+        assert.Contains(t, utils.SkipArr, "aws_vpc.example_vpc")
+    })
+
+    t.Run("Multiple resources with skip comment, all added to utils.SkipArr", func(t *testing.T) {
+        // Initialize TerraformParser and parse file with multiple resources containing skip tags
+        p := &TerraformParser{}
+        p.Init("../../../tests/terraform/skipComment/", nil)
+        defer p.Close()
+        filePath := "../../../tests/terraform/skipComment/skipResource.tf"
+        _, err := p.ParseFile(filePath)
+        if err != nil {
+            t.Errorf("failed to read hcl file because %s", err)
+        }
+        assert.Equal(t, 3, len(utils.SkipArr))
+        assert.Contains(t, utils.SkipArr, "aws_vpc.example_vpc")
+        assert.Contains(t, utils.SkipArr, "aws_subnet.example_subnet")
+        assert.Contains(t, utils.SkipArr, "aws_instance.example_instance")
+    })
+}
+
 
 func TestTerraformParser_ParseFile(t *testing.T) {
 	t.Run("parse aws eks file", func(t *testing.T) {

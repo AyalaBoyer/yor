@@ -17,7 +17,14 @@ import (
 
 // RemoveGcpInvalidChars Source of regex: https://cloud.google.com/compute/docs/labeling-resources
 var RemoveGcpInvalidChars = regexp.MustCompile(`[^\p{Ll}\p{Lo}\p{N}_-]`)
+var SkipArr = make ([]string, 0) 
 
+func AppendSkippesRunner( skippedResources *[]string){
+
+ *skippedResources = append(*skippedResources,SkipArr...)
+ SkipArr = SkipArr[:0]
+ 
+}
 func InSlice[T comparable](elems []T, v T) bool {
 	for _, s := range elems {
 		if v == s {
