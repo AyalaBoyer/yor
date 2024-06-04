@@ -254,6 +254,23 @@ func TestRunResults(t *testing.T) {
 			}
 		}
 	})
+	t.Run("Test not tagging skipped resources in ./resources directory", func(t *testing.T) {
+		yorRunner := runner.Runner{}
+		err := yorRunner.Init(&clioptions.TagOptions{
+			Directory: "./resources",
+			Parsers:   []string{"Terraform"},
+		})
+		failIfErr(t, err)
+		reportService, err := yorRunner.TagDirectory()
+		failIfErr(t, err)
+
+		reportService.CreateReport()
+		report := reportService.GetReport()
+
+		notSkippedResources := report.Summary.Scanned
+		assert.Equal(t, 4, notSkippedResources)
+	})
+
 }
 
 func TestTagUncommittedResults(t *testing.T) {

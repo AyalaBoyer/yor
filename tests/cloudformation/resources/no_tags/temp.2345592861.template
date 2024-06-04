@@ -1,0 +1,26 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "S3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "yor_trace",
+            "Value": "0054e978-f7c6-42cf-bfeb-ba6f98b9cacd"
+          },
+          {
+            "Key": "yor_name",
+            "Value": "S3Bucket"
+          }
+        ],
+        "AccessControl": "PublicRead",
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html",
+          "ErrorDocument": "error.html"
+        }
+      },
+      "DeletionPolicy": "Retain"
+    }
+  }
+}

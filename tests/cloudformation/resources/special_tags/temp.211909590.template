@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Test FMS Policy tags
+
+Resources:
+  testPolicy:
+    Type: AWS::FMS::Policy
+    Properties:
+      Tags:
+        - Key: "isSpecial"
+          Value: "true"
+        - Key: yor_trace
+          Value: 825dffe4-6186-423e-ada7-d444fce6b319
+        - Key: yor_name
+          Value: testPolicy
+      ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer

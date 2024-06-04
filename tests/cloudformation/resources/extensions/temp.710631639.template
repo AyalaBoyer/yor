@@ -1,0 +1,29 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Sample EBS Volume with EC2 instance template",
+  "Resources": {
+    "NewVolume": {
+      "Type": "AWS::EC2::Volume",
+      "Properties": {
+        "Size": 100,
+        "Encrypted": true,
+        "AvailabilityZone": "us-west-2a",
+        "Tags": [
+          {
+            "Key": "MyTag",
+            "Value": "TagValue"
+          },
+          {
+            "Key": "yor_trace",
+            "Value": "81cdc441-70dd-4e84-b5d4-50a383a3f991"
+          },
+          {
+            "Key": "yor_name",
+            "Value": "NewVolume"
+          }
+        ]
+      },
+      "DeletionPolicy": "Snapshot"
+    }
+  }
+}

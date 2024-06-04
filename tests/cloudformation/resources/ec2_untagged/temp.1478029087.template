@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  EC2InstanceResource0:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-04169656fea786776
+      Tags:
+        - Key: yor_trace
+          Value: 4bfbd23d-c8c5-4c30-8023-9388fb994c6e
+        - Key: yor_name
+          Value: EC2InstanceResource0
+  EC2InstanceResource1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-04169656fea786776
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: false
+          DeviceIndex: "0"
+          GroupSet:
+            - "myVPCEC2SecurityGroup"
+          SubnetId: "PublicSubnet"
+      Tags:
+        - Key: yor_trace
+          Value: 7ff3357b-9654-4e5d-b9a7-ae3218a469e7
+        - Key: yor_name
+          Value: EC2InstanceResource1
+# Some unindented comment
+  EC2LaunchTemplateResource0:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: ami-04169656fea786776
+    # Some indented comment
+  EC2LaunchTemplateResource1:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: ami-04169656fea786776
+        NetworkInterfaces:
+          - AssociatePublicIpAddress: false
+            DeviceIndex: 0
+            Groups:
+              - "myVPCEC2SecurityGroup"
+            SubnetId: "PublicSubnet"
+Outputs:
+  Example:
+    Description: mock example
+    Value: !Join
+      - ''
+      - - 'redis://'
+        - !GetAtt
+          - EC2LaunchTemplateResource0
+          - ImageId
+        - ':'
+        - !GetAtt
+          - EC2InstanceResource1
+          - NetworkInterfaces.AssociatePublicIpAddress

@@ -1,0 +1,34 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "S3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "new_tag",
+            "Value": "new_value"
+          },
+          {
+            "Key": "another_tag",
+            "Value": "another_val"
+          },
+          {
+            "Key": "yor_trace",
+            "Value": "9b2ec5b5-c0f9-4db8-b810-30fa8fcb8b69"
+          },
+          {
+            "Key": "yor_name",
+            "Value": "S3Bucket"
+          }
+        ],
+        "AccessControl": "PublicRead",
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html",
+          "ErrorDocument": "error.html"
+        }
+      },
+      "DeletionPolicy": "Retain"
+    }
+  }
+}

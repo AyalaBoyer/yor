@@ -1,0 +1,41 @@
+service: my-sls-service
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-east-1
+  tags:
+    GLOBAL_TAG1: foo
+    GLOBAL_TAG2: bar
+  stackTags:
+    RESOURCE_TAG1: foo
+    RESOURCE_TAG2: bar
+
+functions:
+  myFunction:
+    handler: myFunction.handler
+    name: myFunction
+    tags:
+      yor_name: myFunction
+      yor_trace: 15ef6750-135f-4e7e-a6f3-cd79e0250941
+  myFunction2:
+    name: myFunction2
+    handler: myFunction2.handler
+    tags:
+      yor_name: myFunction2
+      yor_trace: 433140ad-3b2d-4260-abcd-127e9f45efee
+
+resources: # CloudFormation template syntax
+  Resources:
+    S3BucketPublicRead:
+      Type: AWS::S3::Bucket
+      Properties:
+        Tags:
+          - Key: TAG1_CFN
+            Value: CFN Tag Value
+          - Key: TAG2_CFN
+            Value: CFN Tag2 Value
+        AccessControl: Private
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256

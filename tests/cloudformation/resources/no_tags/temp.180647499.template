@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+      Tags:
+        - Key: yor_name
+          Value: S3Bucket
+        - Key: yor_trace
+          Value: c7875260-d4ab-4793-acf2-510865ffb596
+    DeletionPolicy: Retain

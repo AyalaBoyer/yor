@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Sample EBS Volume with EC2 instance template
+Resources:
+  NewVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      Size: 100
+      Encrypted: true
+      #Encrypted: false
+      Tags:
+        - Key: MyTag
+          Value: TagValue
+        - Key: Name
+          Value: !Ref EnvironmentName
+        - Key: new_tag
+          Value: new_value
+        - Key: yor_trace
+          Value: a9d61c44-95e5-4b0b-a634-3953324679aa
+        - Key: yor_name
+          Value: NewVolume
+      AvailabilityZone: us-west-2a
+    DeletionPolicy: Snapshot
+
+Outputs:
+  VolumeId:
+    Value: !Ref NewVolume
+    Export:
+      Name: NewVolumeId

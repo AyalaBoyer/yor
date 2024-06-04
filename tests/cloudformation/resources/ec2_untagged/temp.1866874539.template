@@ -1,0 +1,99 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "EC2InstanceResource0": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "yor_trace",
+            "Value": "7032ab5a-178c-438a-af9e-0148b7afafdf"
+          },
+          {
+            "Key": "yor_name",
+            "Value": "EC2InstanceResource0"
+          }
+        ],
+        "ImageId": "ami-04169656fea786776"
+      }
+    },
+    "EC2InstanceResource1": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "yor_trace",
+            "Value": "09cc5ac7-7000-4f5e-b242-a6ebecade42a"
+          },
+          {
+            "Key": "yor_name",
+            "Value": "EC2InstanceResource1"
+          }
+        ],
+        "ImageId": "ami-04169656fea786776",
+        "NetworkInterfaces": [
+          {
+            "AssociatePublicIpAddress": false,
+            "DeviceIndex": "0",
+            "GroupSet": [
+              "myVPCEC2SecurityGroup"
+            ],
+            "SubnetId": "PublicSubnet"
+          }
+        ]
+      }
+    },
+    "EC2LaunchTemplateResource0": {
+      "Type": "AWS::EC2::LaunchTemplate",
+      "Properties": {
+        "LaunchTemplateData": {
+          "ImageId": "ami-04169656fea786776"
+        }
+      }
+    },
+    "EC2LaunchTemplateResource1": {
+      "Type": "AWS::EC2::LaunchTemplate",
+      "Properties": {
+        "LaunchTemplateData": {
+          "ImageId": "ami-04169656fea786776",
+          "NetworkInterfaces": [
+            {
+              "AssociatePublicIpAddress": false,
+              "DeviceIndex": 0,
+              "Groups": [
+                "myVPCEC2SecurityGroup"
+              ],
+              "SubnetId": "PublicSubnet"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "Example": {
+      "Description": "mock example",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "redis://",
+            {
+              "Fn::GetAtt": [
+                "EC2LaunchTemplateResource0",
+                "ImageId"
+              ]
+            },
+            ":",
+            {
+              "Fn::GetAtt": [
+                "EC2InstanceResource1",
+                "NetworkInterfaces.AssociatePublicIpAddress"
+              ]
+            }
+          ]
+        ]
+      }
+    }
+  }
+}
